@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/draw
+    username: ${USER_NAME}
+    password: ${PASSWORD}
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  jpa.properties:
+    hibernate.format_sql: true
