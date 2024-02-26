@@ -1,12 +1,12 @@
 package com.equbmember.drawEqub.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -19,7 +19,16 @@ public class Member {
     private Long id;
     private String name;
     private double contributionAmount;
-    private boolean participated;
+    private boolean hasWon;
     private Integer winningMonth;
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY) // Relationship with Equb
+    @JoinColumn(name = "equb_id")
+    private Equb equb;
+
+//    @JsonBackReference
+//    @ManyToOne(fetch = FetchType.LAZY) // Relationship with Enterprise
+//    @JoinColumn(name = "enterprise_id")
+//    private Enterprise enterprise;
 
 }
