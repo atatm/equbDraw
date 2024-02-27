@@ -1,5 +1,6 @@
 package com.equbmember.drawEqub.controller;
 
+import com.equbmember.drawEqub.dto.EqubResponseDto;
 import com.equbmember.drawEqub.model.Equb;
 import com.equbmember.drawEqub.service.EqubService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,4 +23,10 @@ public class EqubController {
     public List<Equb> getEqub(){
         return equbService.getEqub();
     }
+
+    @GetMapping("get/{id}")
+    public ResponseEntity<String> getEqubById(@PathVariable Long id){
+        return equbService.getEqubById(id);
+    }
+
 }

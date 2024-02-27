@@ -25,6 +25,9 @@ public class Equb {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String equbName;
+
+
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "enterprise_code")
 //    private Enterprise enterprise;
@@ -32,6 +35,9 @@ public class Equb {
 //    @ManyToOne
 //    @JoinColumn(name = "created_by_id")
 //    private User createdBy;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Interval equbType;
 
     @Column(nullable = false)
     private BigDecimal equbAmount;
@@ -48,9 +54,6 @@ public class Equb {
     @Column(nullable = false)
     private int currentMemberCount;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Interval interval;
 
 //    @ManyToMany
 //    @JoinTable(name = "employee_equb",
@@ -61,10 +64,9 @@ public class Equb {
     @OneToMany(mappedBy = "equb")
     private List<Member> members;
 
-    @JsonBackReference
-    @ManyToOne//(fetch = FetchType.LAZY) // Relationship with Equb
-    @JoinColumn(name = "enterprise_id")
-    private Enterprise enterprise;
-
+//    @JsonBackReference
+//    @ManyToOne//(fetch = FetchType.LAZY) // Relationship with Equb
+//    @JoinColumn(name = "enterprise_id")
+//    private Enterprise enterprise;
 
 }

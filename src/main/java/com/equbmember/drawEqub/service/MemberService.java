@@ -1,9 +1,11 @@
    package com.equbmember.drawEqub.service;
 
+import com.equbmember.drawEqub.dto.MemberResponseDto;
 import com.equbmember.drawEqub.model.Equb;
 import com.equbmember.drawEqub.model.Member;
 import com.equbmember.drawEqub.repository.EqubMemberRepository;
 import com.equbmember.drawEqub.repository.EqubRepository;
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -33,14 +35,17 @@ public class MemberService {
     }
 
     public ResponseEntity<String>  pickLuckyWinner(Long equbId) {
-            Optional<Equb> equb = equbRepository.findById(equbId); //.orElseThrow(() -> new RuntimeException("Equb not found"));
+            //List<Member> newMember = equbRepository.findById(equb.getId()).get().getMembers();
+
+          //Optional<Equb> equbNew = equbRepository.findById(equbId); //.orElseThrow(() -> new RuntimeException("Equb not found"));
            // Optional<Member> checkMemberByEqubId = equbMemberRepository.findById(equbId);
             // Fetch all members who have not yet won
-
-            List<Member> eligibleMembers = equbMemberRepository.findByHasWonFalse();
+           // Optional<Member> eligibleEqub= equbRepository.findById(equbId);
+          //  List<Member> member = equb.get().getMembers();
+            List<Member> eligibleMembers = equbMemberRepository.findByHasWonFalseAndEqubId(equbId);
 
             // Pick a random winner from the eligible members
-            if (!eligibleMembers.isEmpty()&& (equb.isPresent())) {
+            if (!eligibleMembers.isEmpty()) {
                 int index = random.nextInt(eligibleMembers.size());
                 Member winner = eligibleMembers.get(index);
                 winner.setHasWon(true);
@@ -59,5 +64,21 @@ public class MemberService {
             // Return the month as an integer (1 for January, 2 for February, etc.)
             return 0;
         }
+
+    public ResponseEntity<String> getMemberById(Long id) {
+        Optional<Member> checkMemberExist = equbMemberRepository.findById(id);
+        if(checkMemberExist.isPresent()){
+            Member member = checkMemberExist.get();
+            MemberResponseDto responseDTO = new MemberResponseDto();
+            responseDTO.setEmail(member.getEmail());
+            responseDTO.setEmployeeId(member.getEmployeeId());
+            responseDTO.setUserName(member.getName());
+            return ResponseEntity.ok("the member detail is : "+responseDTO);
+        }
+        return ResponseEntity.badRequest().body("the equb member with id "+id+ "is not found");
     }
+
+
+
+}
 

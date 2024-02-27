@@ -18,6 +18,8 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String email;
+    private String employeeId;
     private double contributionAmount;
     private boolean hasWon;
     private Integer winningMonth;

@@ -11,7 +11,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Table(name = "enterprise")
 public class Enterprise {
 
@@ -21,19 +20,18 @@ public class Enterprise {
     @Column(name = "enterprise_code")
     private String enterpriseCode;
 
-    @Column(nullable = false)
     private String enterpriseName;
 
-    @Column(nullable = false)
+
     private String tinNumber;
 
-    @Column(nullable = false)
+
     private String owner;
 
-    @Column(nullable = false)
+
     private String enterpriseType;
 
-    @Column(nullable = false)
+
     private String businessNumber;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -46,10 +44,10 @@ public class Enterprise {
 //    @JsonManagedReference
 //    @OneToMany(mappedBy = "enterprise")
 //    private List<Member> members;
-
-    @JsonManagedReference
-    @OneToMany(mappedBy = "enterprise")
-    private List<Equb> equb;
+//
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "enterprise")
+//    private List<Equb> equb;
 
 
 }

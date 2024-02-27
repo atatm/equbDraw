@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface EqubMemberRepository extends JpaRepository<Member,Long> {
     List<Member> findByHasWonFalse();
+    List<Member> findByHasWonFalseAndEqubId(Long equbId);
 }
