@@ -54,15 +54,17 @@ public class Equb {
     @Column(nullable = false)
     private int currentMemberCount;
 
+    @JsonManagedReference
+    @OneToMany(mappedBy = "equb")
+    private List<Member> members;
+
 
 //    @ManyToMany
 //    @JoinTable(name = "employee_equb",
 //            joinColumns = @JoinColumn(name = "equb_id"),
 //            inverseJoinColumns = @JoinColumn(name = "employee_id"))
 //    private List<Employee> members;
-    @JsonManagedReference
-    @OneToMany(mappedBy = "equb")
-    private List<Member> members;
+
 
 //    @JsonBackReference
 //    @ManyToOne//(fetch = FetchType.LAZY) // Relationship with Equb
