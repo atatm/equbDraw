@@ -24,39 +24,29 @@ public class MemberService {
     public MemberService() {
         this.random = new Random();
     }
-    public void addMember(Member member , Long equbId) {
+    public void addMember(Long equbId,Member member ) {
         Equb equb = equbRepository.findById(equbId).orElseThrow(() -> new RuntimeException("Equb not found"));
-        //Employee employeeExist = employeeRepository.findById(employeeId).orElseThrow(() -> new RuntimeException("you are not legal to register to this equb"));
-        // Step 2: Obtain the generated identifier of the Equb entity
+         // Step 2: Obtain the generated identifier of the Equb entity
         Long equbIdentifier = equb.getId();
-
+        equb.setCurrentMemberCount(equb.getCurrentMemberCount()+1);
+        equbRepository.save(equb);
         member.setEqub(equb );
         equbMemberRepository.save(member);
     }
 
     public ResponseEntity<String>  pickLuckyWinner(Long equbId) {
-            //List<Member> newMember = equbRepository.findById(equb.getId()).get().getMembers();
-
-          //Optional<Equb> equbNew = equbRepository.findById(equbId); //.orElseThrow(() -> new RuntimeException("Equb not found"));
-           // Optional<Member> checkMemberByEqubId = equbMemberRepository.findById(equbId);
-            // Fetch all members who have not yet won
-           // Optional<Member> eligibleEqub= equbRepository.findById(equbId);
-          //  List<Member> member = equb.get().getMembers();
-            List<Member> eligibleMembers = equbMemberRepository.findByHasWonFalseAndEqubId(equbId);
+        List<Member> eligibleMembers = equbMemberRepository.findByHasWonFalseAndEqubId(equbId);
 
             // Pick a random winner from the eligible members
-            if (!eligibleMembers.isEmpty()) {
-                int index = random.nextInt(eligibleMembers.size());
-                Member winner = eligibleMembers.get(index);
-                winner.setHasWon(true);
-                winner.setWinningMonth(getCurrentMonth());
-                equbMemberRepository.save(winner);
-                return ResponseEntity.ok("the Lucky member" + winner);
-            }
-            return ResponseEntity.badRequest().body("There is no member ");
-
-        //return ResponseEntity.badRequest().body("equb not found "); // No eligible members left
-
+        if (!eligibleMembers.isEmpty()) {
+            int index = random.nextInt(eligibleMembers.size());
+            Member winner = eligibleMembers.get(index);
+            winner.setHasWon(true);
+            winner.setWinningMonth(getCurrentMonth());
+            equbMemberRepository.save(winner);
+            return ResponseEntity.ok("the Lucky member" + winner);
+        }
+        return ResponseEntity.badRequest().body("There is no member ");
     }
 
         private int getCurrentMonth() {
@@ -76,6 +66,11 @@ public class MemberService {
             return ResponseEntity.ok("the member detail is : "+responseDTO);
         }
         return ResponseEntity.badRequest().body("the equb member with id "+id+ "is not found");
+    }
+
+    public List<Member> getMemberByEqubId(Long equbId){
+        List<Member> members = equbMemberRepository.findByEqubId(equbId);
+        return members.stream().toList();
     }
 
 

@@ -11,22 +11,25 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("api/v1/member")
 public class MemberController {
     @Autowired
     MemberService memberService;
-    @Autowired
-    EqubRepository equbRepository;
 
     @PostMapping("/addMember/{equbId}")
     public ResponseEntity<String> addMember(@PathVariable Long equbId ,@RequestBody Member member) {
-        memberService.addMember(member ,equbId);
+        memberService.addMember(equbId ,member);
         return ResponseEntity.ok("Member added successfully");
     }
 
-    @PostMapping("/members/{id}")
+    @PostMapping("/getMember/{id}")
     public ResponseEntity<String> getMemberById(@PathVariable Long id) {
         return memberService.getMemberById(id);
-        //return ResponseEntity.ok("Member added successfully");
+    }
+
+    @GetMapping("/getMember/{equbId}")
+    public List<Member> getMemberByEqubId(@PathVariable Long equbId) {
+        return memberService.getMemberByEqubId(equbId);
     }
 
     @GetMapping("/draw/{equbId}")
@@ -34,6 +37,8 @@ public class MemberController {
 
         return memberService.pickLuckyWinner(equbId);
     }
+
+
 
 
 

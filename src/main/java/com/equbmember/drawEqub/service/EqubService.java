@@ -37,4 +37,17 @@ public class EqubService {
         }
         return ResponseEntity.badRequest().body("the equb with id "+id+" is not found");
     }
+
+    public ResponseEntity<String> updateEqub(Long id, Equb equb) {
+        Optional<Equb> checkEqubExist = equbRepository.findById(id);
+        if (checkEqubExist.isPresent()){
+           Equb newEqub = checkEqubExist.get();
+           newEqub.setEqubName(equb.getEqubName());
+           newEqub.setCurrentMemberCount(equb.getCurrentMemberCount());
+           newEqub.setStartingDate(equb.getStartingDate());
+           equbRepository.save(newEqub);
+           return ResponseEntity.ok("equb with id "+id+" is updated successfully");
+        }
+       return ResponseEntity.badRequest().body("equb with id "+id+ " is not found");
+    }
 }
