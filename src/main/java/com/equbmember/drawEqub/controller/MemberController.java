@@ -1,8 +1,6 @@
 package com.equbmember.drawEqub.controller;
 
-import com.equbmember.drawEqub.model.Equb;
 import com.equbmember.drawEqub.model.Member;
-import com.equbmember.drawEqub.repository.EqubRepository;
 import com.equbmember.drawEqub.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

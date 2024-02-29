@@ -14,7 +14,7 @@ import java.util.List;
 public class EqubController {
     @Autowired
     EqubService equbService;
-    @PostMapping
+    @PostMapping("addEqub")
     public ResponseEntity<String> addEqub(@RequestBody Equb equb){
         return equbService.createEqub(equb);
     }
@@ -25,7 +25,7 @@ public class EqubController {
     }
 
     @GetMapping("getEqubById/{id}")
-    public ResponseEntity<String> getEqubById(@PathVariable Long id){
+    public ResponseEntity<EqubResponseDto> getEqubById(@PathVariable Long id){
         return equbService.getEqubById(id);
     }
 

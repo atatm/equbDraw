@@ -24,7 +24,7 @@ public class EqubService {
         return equbRepository.findAll();
     }
 
-    public ResponseEntity<String> getEqubById(Long id) {
+    public ResponseEntity<EqubResponseDto> getEqubById(Long id) {
         Optional<Equb> checkEqubExist = equbRepository.findById(id);
         if(checkEqubExist.isPresent()){
             Equb equb = checkEqubExist.get();
@@ -33,9 +33,9 @@ public class EqubService {
             responseDto.setEqubType(equb.getEqubType());
             responseDto.setAmount(equb.getEqubAmount());
             responseDto.setNumberOfMembers(equb.getNumberOfMembers());
-            return ResponseEntity.ok("the equb id with "+id + " is :"+responseDto);
+            return ResponseEntity.ok(responseDto);
         }
-        return ResponseEntity.badRequest().body("the equb with id "+id+" is not found");
+        return ResponseEntity.badRequest().build();
     }
 
     public ResponseEntity<String> updateEqub(Long id, Equb equb) {

@@ -2,9 +2,11 @@
 
 import com.equbmember.drawEqub.dto.MemberResponseDto;
 import com.equbmember.drawEqub.model.Equb;
+import com.equbmember.drawEqub.model.History;
 import com.equbmember.drawEqub.model.Member;
 import com.equbmember.drawEqub.repository.EqubMemberRepository;
 import com.equbmember.drawEqub.repository.EqubRepository;
+import com.equbmember.drawEqub.repository.HistoryRepository;
 import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ public class MemberService {
     EqubMemberRepository equbMemberRepository;
     @Autowired
     EqubRepository equbRepository;
+    @Autowired
+    HistoryRepository historyRepository;
     Random random;
     public MemberService() {
         this.random = new Random();
@@ -40,6 +44,7 @@ public class MemberService {
 
     public ResponseEntity<String>  pickLuckyWinner(Long equbId) {
         List<Member> eligibleMembers = equbMemberRepository.findByHasWonFalseAndEqubId(equbId);
+        History history = new History();
 
             // Pick a random winner from the eligible members
         if (!eligibleMembers.isEmpty()) {
@@ -48,6 +53,9 @@ public class MemberService {
             winner.setHasWon(true);
             winner.setWinningMonth(getCurrentMonth());
             equbMemberRepository.save(winner);
+            history.setName(winner.getName());
+            history.setEqubId(equbId);
+            historyRepository.save(history);
             return ResponseEntity.ok("the Lucky member" + winner);
         }
         return ResponseEntity.badRequest().body("There is no member ");
