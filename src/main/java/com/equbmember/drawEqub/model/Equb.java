@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -46,10 +47,10 @@ public class Equb {
     private int numberOfMembers;
 
     @Column(nullable = false)
-    private Date startingDate;
+    private LocalDate startingDate;
 
     @Column(nullable = false)
-    private Date endDate; // Calculate based on starting_date, interval, and number_of_members
+    private LocalDate endDate; // Calculate based on starting_date, interval, and number_of_members
 
     @Column(nullable = false)
     private int currentMemberCount;

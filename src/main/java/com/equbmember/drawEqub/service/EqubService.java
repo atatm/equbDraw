@@ -1,12 +1,14 @@
 package com.equbmember.drawEqub.service;
 
 import com.equbmember.drawEqub.dto.EqubResponseDto;
+import com.equbmember.drawEqub.model.Enum.Interval;
 import com.equbmember.drawEqub.model.Equb;
 import com.equbmember.drawEqub.repository.EqubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,8 +18,27 @@ public class EqubService {
     EqubRepository equbRepository;
 
     public ResponseEntity<String> createEqub(Equb equb) {
+        int daysToAdd;
+        Interval interval = equb.getEqubType();
+
+        LocalDate resultDate = switch (interval) {
+            case DAILY -> {
+                daysToAdd = equb.getNumberOfMembers();
+                yield equb.getStartingDate().plusDays(daysToAdd);
+            }
+            case WEEKLY -> {
+                daysToAdd = 7 * equb.getNumberOfMembers();
+                yield equb.getStartingDate().plusDays(daysToAdd);
+            }
+            case MONTHLY -> {
+                daysToAdd = 30 * equb.getNumberOfMembers();
+                yield equb.getStartingDate().plusDays(daysToAdd);
+            }
+        };
+        equb.setEndDate(resultDate);
         equbRepository.save(equb);
         return ResponseEntity.ok("equb is added successfully");
+
     }
   
     public List<Equb> getEqub() {

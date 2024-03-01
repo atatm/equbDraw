@@ -31,12 +31,13 @@ public class MemberService {
     public ResponseEntity<String> joinToEqub(Long equbId,Member member ) {
         Equb equb = equbRepository.findById(equbId).orElseThrow(() -> new RuntimeException("Equb not found"));
          // Step 2: Obtain the generated identifier of the Equb entity
-        Long equbIdentifier = equb.getId();
+        //Long equbIdentifier = equb.getId();
         if (equb.getCurrentMemberCount() < equb.getNumberOfMembers()){
             equb.setCurrentMemberCount(equb.getCurrentMemberCount()+1);
-            equbRepository.save(equb);
             member.setEqub(equb );
             equbMemberRepository.save(member);
+            equbRepository.save(equb);
+
             return ResponseEntity.ok("employee is register to equb successfully ");
         }
         return ResponseEntity.badRequest().body("equb fully registered the required number of member , so try other equb");
