@@ -10,6 +10,7 @@ import com.equbmember.drawEqub.repository.HistoryRepository;
 import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,23 +25,24 @@ public class MemberService {
     EqubRepository equbRepository;
     @Autowired
     HistoryRepository historyRepository;
+    @Autowired
+    private KafkaTemplate<String , Member> memberKafkaTemplate;
+
     Random random;
     public MemberService() {
         this.random = new Random();
     }
     public ResponseEntity<String> joinToEqub(Long equbId,Member member ) {
         Equb equb = equbRepository.findById(equbId).orElseThrow(() -> new RuntimeException("Equb not found"));
-         // Step 2: Obtain the generated identifier of the Equb entity
-        //Long equbIdentifier = equb.getId();
         if (equb.getCurrentMemberCount() < equb.getNumberOfMembers()){
             equb.setCurrentMemberCount(equb.getCurrentMemberCount()+1);
             member.setEqub(equb );
             equbMemberRepository.save(member);
             equbRepository.save(equb);
-
+            memberKafkaTemplate.send("WINNER_TOPIC",member);
             return ResponseEntity.ok("employee is register to equb successfully ");
         }
-        return ResponseEntity.badRequest().body("equb fully registered the required number of member , so try other equb");
+        return ResponseEntity.badRequest().body("equb is registered the required number of member , so try another equb");
     }
 
     public ResponseEntity<String>  pickLuckyWinner(Long equbId) {
@@ -52,21 +54,16 @@ public class MemberService {
             int index = random.nextInt(eligibleMembers.size());
             Member winner = eligibleMembers.get(index);
             winner.setHasWon(true);
-            winner.setWinningMonth(getCurrentMonth());
             equbMemberRepository.save(winner);
             history.setName(winner.getName());
             history.setEqubId(equbId);
             historyRepository.save(history);
+            memberKafkaTemplate.send("WINNER_TOPIC",winner);
             return ResponseEntity.ok("the Lucky member" + winner);
         }
         return ResponseEntity.badRequest().body("There is no member ");
     }
 
-        private int getCurrentMonth() {
-            // Implement logic to get the current month, e.g., using java.time.Month or java.util.Calendar
-            // Return the month as an integer (1 for January, 2 for February, etc.)
-            return 0;
-        }
 
     public ResponseEntity<String> getMemberById(Long id) {
         Optional<Member> checkMemberExist = equbMemberRepository.findById(id);
@@ -85,8 +82,6 @@ public class MemberService {
         List<Member> members = equbMemberRepository.findByEqubId(equbId);
         return members.stream().toList();
     }
-
-
 
 }
 

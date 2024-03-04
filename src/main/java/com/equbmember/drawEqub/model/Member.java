@@ -22,7 +22,6 @@ public class Member {
     private String employeeId;
     private double contributionAmount;
     private boolean hasWon;
-    private Integer winningMonth;
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY) // Relationship with Equb
     @JoinColumn(name = "equb_id")

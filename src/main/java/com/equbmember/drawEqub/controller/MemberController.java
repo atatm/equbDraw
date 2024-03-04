@@ -16,8 +16,8 @@ public class MemberController {
 
     @PostMapping("/addMember/{equbId}")
     public ResponseEntity<String> addMember(@PathVariable Long equbId ,@RequestBody Member member) {
-        memberService.joinToEqub(equbId ,member);
-        return ResponseEntity.ok("Member added successfully");
+        return memberService.joinToEqub(equbId ,member);
+
     }
 
     @PostMapping("/getMember/{id}")

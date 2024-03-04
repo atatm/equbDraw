@@ -9,3 +9,5 @@ spring:
       ddl-auto: update
   jpa.properties:
     hibernate.format_sql: true
+  kafka:
+    bootstrap-servers: localhost:9092
